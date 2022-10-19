@@ -8,6 +8,7 @@ import { BsCheck } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 import { onAuthStateChangedListener } from "../../utils/firebase/firebase.utils";
+import axios from "axios";
 
 function Card({ movieData, isLiked = false, removeFromList }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,15 +25,9 @@ function Card({ movieData, isLiked = false, removeFromList }) {
   const addToList = async () => {
     const data = movieData;
     try {
-      await fetch("http://localhost:5000/api/user/add", {
-        method: "POSt",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          data,
-        }),
+      await axios.post("http://localhost:5000/api/user/add", {
+        email,
+        data,
       });
     } catch (error) {
       console.log(error);

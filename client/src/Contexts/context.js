@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import { API_KEY, TMDB_BASE_URL } from "../utils/TMDB/tmdb.utils";
-
+import axios from "axios";
 export const MoviesContext = createContext({
   genres: [],
   all: [],
@@ -110,10 +110,9 @@ export const MoviesProvider = ({ children }) => {
 
   const getUserLikedMovies = useCallback(async (email) => {
     try {
-      const response = await fetch(
+      const { data } = await axios.get(
         `http://localhost:5000/api/user/liked/${email}`
       );
-      const data = await response.json();
       return data;
     } catch (error) {
       console.log(error);
@@ -122,14 +121,13 @@ export const MoviesProvider = ({ children }) => {
 
   const removeFromLikedMovies = useCallback(async (email, movieId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/user/remove`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, movieId }),
-      });
-      const data = await response.json();
+      const { data } = await axios.put(
+        `http://localhost:5000/api/user/remove`,
+        {
+          email,
+          movieId,
+        }
+      );
       return data;
     } catch (error) {
       console.log(error);
